@@ -1,6 +1,6 @@
 import './App.css'
 
-type HackerList = {
+type ListItem = {
   title: string,
   url: string,
   author: string,
@@ -9,7 +9,7 @@ type HackerList = {
   objectID: number,
 }
 
-const list: Array<HackerList> = [
+const list: Array<ListItem> = [
   {
     title: 'React',
     url: 'https://react.dev/',
@@ -37,7 +37,7 @@ const App = () => {
 
       <hr />
 
-      <List />
+      <List list={list} />
     </div>
   );
 }
@@ -45,13 +45,7 @@ const App = () => {
 const Search = () => {
   const handleChange = (event) => {
     console.log(event);
-    console.log(event.target);
     console.log(event.target.value);
-    console.log(addTwoNumbers(Math.random(), Math.random()));
-  }
-
-  const addTwoNumbers = (a: number, b: number): number => {
-    return a + b;
   }
 
   return (
@@ -62,23 +56,25 @@ const Search = () => {
   );
 }
 
-const List = () => {
+const List = (props) => {
   return (
     <ul>
-      {list.map((item) => {
-        return (
-          <li key={item.objectID}>
-            <span>
-              <a href={item.url} target='_blank'>{item.title}</a>
-            </span>
-            <span> {item.author}</span>
-            <span> {item.num_comments}</span>
-            <span> {item.points}</span>
-          </li>
-        );
-      })}
+      {props.list.map((item: ListItem) => (
+        <Item key={item.objectID} item={item} />
+      ))}
     </ul>
   );
 }
+
+const Item = (props) => (
+  <li>
+    <span>
+      <a href={props.item.url} target='_blank'>{props.item.title}</a>
+    </span>
+    <span> {props.item.author}</span>
+    <span> {props.item.num_comments}</span>
+    <span> {props.item.points}</span>
+  </li>
+);
 
 export default App
