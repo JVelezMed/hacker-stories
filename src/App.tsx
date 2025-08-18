@@ -1,16 +1,16 @@
 import './App.css'
 import { useState } from 'react'
 
-type ListItem = {
-  title: string,
+type Story = {
+  objectID: number,
   url: string,
+  title: string,
   author: string,
   num_comments: number,
   points: number,
-  objectID: number,
-}
+};
 
-const list: Array<ListItem> = [
+const stories: Story[] = [
   {
     title: 'React',
     url: 'https://react.dev/',
@@ -29,25 +29,35 @@ const list: Array<ListItem> = [
   },
 ];
 
+const handleSearch = (event : React.ChangeEvent<HTMLInputElement>) => {
+  console.log(event.target.value)
+};
+
 const App = () => {
   return (
     <div>
       <h1>My Hacker Stories</h1>
 
-      <Search />
+      <Search onSearch={handleSearch} />
 
       <hr />
 
-      <List list={list} />
+      <List list={stories} />
     </div>
   );
 }
 
-const Search = () => {
+type SearchProps = {
+  onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+const Search = (props: SearchProps) => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+
+    props.onSearch(event);
   }
 
   return (
@@ -62,17 +72,25 @@ const Search = () => {
   );
 }
 
-const List = (props) => {
+type ListProps = {
+  list: Story[];
+};
+
+const List = (props: ListProps) => {
   return (
     <ul>
-      {props.list.map((item: ListItem) => (
+      {props.list.map((item: Story) => (
         <Item key={item.objectID} item={item} />
       ))}
     </ul>
   );
 }
 
-const Item = (props) => (
+type ItemProps = {
+  item: Story;
+};
+
+const Item = (props: ItemProps) => (
   <li>
     <span>
       <a href={props.item.url} target='_blank'>{props.item.title}</a>
