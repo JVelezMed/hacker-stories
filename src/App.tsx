@@ -30,7 +30,7 @@ const stories: Story[] = [
 ];
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState("React");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -58,15 +58,10 @@ type SearchProps = {
   onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Search = (props: SearchProps) => (
+const Search = ({ search, onSearch }: SearchProps) => (
   <div>
     <label htmlFor="search">Search: </label>
-    <input
-      id="search"
-      type="text"
-      value={props.search}
-      onChange={props.onSearch}
-    />
+    <input id="search" type="text" value={search} onChange={onSearch} />
   </div>
 );
 
@@ -74,10 +69,10 @@ type ListProps = {
   list: Story[];
 };
 
-const List = (props: ListProps) => {
-  return props.list.length > 0 ? (
+const List = ({ list }: ListProps) => {
+  return list.length > 0 ? (
     <ul>
-      {props.list.map((item: Story) => (
+      {list.map((item) => (
         <Item key={item.objectID} item={item} />
       ))}
     </ul>
@@ -92,16 +87,16 @@ type ItemProps = {
   item: Story;
 };
 
-const Item = (props: ItemProps) => (
+const Item = ({ item }: ItemProps) => (
   <li>
     <span>
-      <a href={props.item.url} target="_blank">
-        {props.item.title}
+      <a href={item.url} target="_blank">
+        {item.title}
       </a>
     </span>
-    <span> {props.item.author}</span>
-    <span> {props.item.num_comments}</span>
-    <span> {props.item.points}</span>
+    <span> {item.author}</span>
+    <span> {item.num_comments}</span>
+    <span> {item.points}</span>
   </li>
 );
 
