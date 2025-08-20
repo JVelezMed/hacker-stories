@@ -29,11 +29,17 @@ const stories: Story[] = [
   },
 ];
 
-const handleSearch = (event : React.ChangeEvent<HTMLInputElement>) => {
-  console.log(event.target.value)
-};
-
 const App = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  const handleSearch = (event : React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredStories = stories.filter(story =>
+    story.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div>
       <h1>My Hacker Stories</h1>
@@ -42,7 +48,7 @@ const App = () => {
 
       <hr />
 
-      <List list={stories} />
+      <List list={filteredStories} />
     </div>
   );
 }
@@ -51,26 +57,12 @@ type SearchProps = {
   onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Search = (props: SearchProps) => {
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-
-    props.onSearch(event);
-  }
-
-  return (
-    <div>
-      <label htmlFor='search'>Search: </label>
-      <input id='search' type='text' onChange={(e) => handleChange(e)} />
-
-      <p>
-        Searching for <strong>{searchTerm}</strong>
-      </p>
-    </div>
-  );
-}
+const Search = (props: SearchProps) => (
+  <div>
+    <label htmlFor='search'>Search: </label>
+    <input id='search' type='text' onChange={props.onSearch} />
+  </div>
+);
 
 type ListProps = {
   list: Story[];
@@ -78,11 +70,14 @@ type ListProps = {
 
 const List = (props: ListProps) => {
   return (
-    <ul>
-      {props.list.map((item: Story) => (
-        <Item key={item.objectID} item={item} />
-      ))}
-    </ul>
+    props.list.length > 0 ? (
+      <ul>
+        {props.list.map((item: Story) => (
+          <Item key={item.objectID} item={item} />
+        ))}
+      </ul>) : (
+        <div><em>No results found</em></div>
+      )
   );
 }
 
