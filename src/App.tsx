@@ -29,12 +29,20 @@ const stories: Story[] = [
   },
 ];
 
-const App = () => {
-  const [searchTerm, setSearchTerm] = useState(localStorage.getItem("search") || "");
+const useStorageState = (key, initialState) => {
+  const [value, setValue] = useState(
+    localStorage.getItem(key) || initialState
+  );
 
   useEffect(() => {
-    localStorage.setItem("search", searchTerm);
-  }, [searchTerm]);
+    localStorage.setItem(key, value);
+  }, [key, value]);
+
+  return [value, setValue];
+};
+
+const App = () => {
+  const [searchTerm, setSearchTerm] = useStorageState("search", "React");
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
